@@ -1,5 +1,6 @@
 import { GlobalStyle, Container } from './GlobalStyle';
 import React from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import contact from './contact';
 import { ContactForm } from './ContactForm/ContactForm';
@@ -34,11 +35,11 @@ export const App = () => {
   const addName = newName => {
     contacts.some(
       contact =>
-        (contact.name.toLowerCase().trim() ===
-          newName.name.toLowerCase().trim()) &
-        (contact.number.trim() === newName.number.trim())
+        contact.name.toLowerCase().trim() ===
+          newName.name.toLowerCase().trim() ||
+        contact.number.trim() === newName.number.trim()
     )
-      ? alert(`Contact number ${newName.number} already exists`)
+      ? toast.error('A contact with that name or number already exists')
       : setContacts(prevState => [...prevState, newName]);
   };
 
@@ -59,6 +60,7 @@ export const App = () => {
       <Filter filter={filter} onChangeFilter={changeFilter} />
       <ContactList contact={getVisibleContacts()} onDelete={handleDelete} />
 
+      <Toaster position="top-center" reverseOrder={false} />
       <GlobalStyle />
     </Container>
   );
